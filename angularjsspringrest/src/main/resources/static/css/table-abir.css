@@ -1,0 +1,26 @@
+input,textarea {
+  background-color:#f7f7f7;
+  border:none;
+  border-radius:0px;
+}
+table {
+	font-size: 12px;
+	font-family: helvetica;
+}
+table th {
+	font-size: 14px;
+	background-color: silver;
+}
+table tr td {
+	margin: 0px;
+	padding: 0px;
+}
+.dead {
+	border: none;
+    outline: 0;
+    width: 95%;
+    background-color: #ffffff;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
