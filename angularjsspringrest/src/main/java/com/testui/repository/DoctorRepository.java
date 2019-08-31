@@ -11,4 +11,5 @@ import com.testui.model.Doctor;
 @RepositoryRestResource(collectionResourceRel = "doctors", path = "doctors")
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 	List<Doctor> findByQualification( @Param("q")String q ); 
+	List<Doctor> findByNameContaining( @Param("name") String name);
 }

@@ -17,7 +17,7 @@ function doPost( $http, $scope, url ) {
 	)
 }
 
-function loadInit($scope, $http, entity,url) {
+function search($scope, $http, entity,url) {
 	$scope.msg = 'Loading...';
 	$http.get(entity + "/" + url)
 		 .then( function(res) {
@@ -38,9 +38,10 @@ function loadById($arr, $http, entity, id) {
 		 });
 }
 
-function postObject( $scope, $http, entity, obj) {
+function postObject( $http, entity, obj, func) {
 	$http.post(entity, obj)
 	     .then(function (resp) {
+	    	 func(resp);
 	    	 //setTimeout(function(){ $scope.msg = ''; }, 3000);
 	     });
 }

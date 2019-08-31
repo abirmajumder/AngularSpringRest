@@ -13,9 +13,27 @@
 			app.controller( 'cntl', function($scope,$http) {
 				$scope.st = ["Y","N"];
 				$scope.objEdits = {};
+				$scope.doctor = {"id":"","name":"","qualification":"","active":"Y"};
+				$scope.objEmpty = { "doctor" : {"id":"","name":"","qualification":"","active":"Y"} };
+				
+				$scope.addObj = function() {
+					postObject($http, "doctors", $scope.doctor, function (resp) {
+						$scope.doctor.id = resp.data.id;
+						$scope.doctors.push($scope.doctor);
+						$scope.doctor = {"id":"","name":"","qualification":"","active":"Y"};
+					});
+				}
+				
+				$scope.addAny = function( entity, objName) {
+					postObject($http, entity, $scope[objName], function (resp) {
+						$scope[objName].id = resp.data.id;
+						$scope[entity].push($scope[objName]);
+						$scope[objName] = $scope.objEmpty[objName];
+					});
+				}
 				
 				$scope.initing = function() {
-					loadInit($scope, $http, "doctors", "search/findByQualification?q=MD");
+					search($scope, $http, "doctors", "search/findByQualification?q=MD");
 				}
 				
 				$scope.setViewForEdit = function( entity, docId, val ) {
@@ -30,11 +48,13 @@
 				}
 				
 				$scope.rowClass = function( entity, id ) {
-					return $scope.rowView('doctors', id) ? 'form-control' : 'dead';
+					return $scope.rowView(entity, id) ? 'form-control' : 'dead';
 				}
 				
 				$scope.updateRow = function( entity, obj ) {
-					postObject($http, $http, entity, obj);
+					postObject($http, entity, obj, function (resp) {
+						alert(JSON.stringify(resp.data));
+					});
 					$scope.objEdits[ entity + "_" + obj.id] = false;
 				}
 			});
@@ -46,6 +66,9 @@
 			<div class='container-fluid'>
 				<div class='col-sm-12'>
 					<h3>{{msg}}</h3>
+				</div>
+				<div class='col-sm-12'>
+					<h3>Doctors List </h3>
 				</div>
 				<div class='col-sm-12'>
 					<table class='table'>
@@ -71,7 +94,18 @@
 										style='color:green;cursor:hand;' ng-click="updateRow( 'doctors', doc )"></span>
 									<span class="glyphicon glyphicon-remove-circle" ng-show="rowView('doctors', doc.id)"
 										style='color:red;cursor:hand;' ng-click="setViewForEdit( 'doctors', doc.id, false)"></span>
-								</td>	
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input ng-model="obj.name" class='form-control' />
+								</td>
+								<td>
+									<input ng-model="obj.qualification" class='form-control'  />
+								</td>
+								<td>
+									<input type="image" src="image/user-add-icon.png" style="color:red;" ng-click="addAny('doctors','obj')"/>
+								</td>
 							</tr>
 						</tbody>
 					</table>
