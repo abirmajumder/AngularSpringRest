@@ -8,9 +8,57 @@
 		<script src = 'js/angular.min.js' type = 'text/javascript' ></script>
 		<script src = 'js/common.js' type = 'text/javascript' ></script>
 		<script >
-			var initLoadArr = [ { "entity" : "doctors", "url" : "search/findByQualification?q=MD" } ];
-			var emptyObj = { "doctor" : {"id":"","name":"","qualification":"","active":"Y"} };
-			editableGridController( angular.module( 'app',[]), 'cntl', emptyObj, initLoadArr );
+			
+			var app = angular.module( 'app',[]);
+			app.controller( 'cntl', function($scope,$http) {
+				$scope.st = ["Y","N"];
+				$scope.objEdits = {};
+				$scope.area = {"id":"","name":"","qualification":"","active":"Y"};
+				$scope.objEmpty = { "area" : {"id":"","name":"","qualification":"","active":"Y"} };
+				
+				$scope.addObj = function() {
+					postObject($http, "doctors", $scope.area, function (resp) {
+						$scope.area.id = resp.data.id;
+						$scope.doctors.push($scope.area);
+						$scope.area = {"id":"","name":"","qualification":"","active":"Y"};
+					});
+				}
+				
+				$scope.addAny = function( entity, objName) {
+					postObject($http, entity, $scope[objName], function (resp) {
+						$scope[objName].id = resp.data.id;
+						$scope[entity].push($scope[objName]);
+						$scope[objName] = $scope.objEmpty[objName];
+					});
+				}
+				
+				$scope.initing = function() {
+					search($scope, $http, "doctors", "search/findByQualification?q=MD");
+				}
+				
+				$scope.setViewForEdit = function( entity, docId, val ) {
+					$scope.objEdits[ entity + "_" + docId] = val;
+					if(!val) {
+						loadById($scope[entity], $http, entity, docId);
+					}
+				}
+				
+				$scope.rowView = function ( entity, id ) {
+					return $scope.objEdits[ entity + "_" + id];
+				}
+				
+				$scope.rowClass = function( entity, id ) {
+					return $scope.rowView(entity, id) ? 'form-control' : 'dead';
+				}
+				
+				$scope.updateRow = function( entity, obj ) {
+					postObject($http, entity, obj, function (resp) {
+						alert(JSON.stringify(resp.data));
+					});
+					$scope.objEdits[ entity + "_" + obj.id] = false;
+				}
+			});
+
 		</script>
 	</head>
 	<body ng-controller = 'cntl' ng-app = 'app' ng-init="initing()">

@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.testui",
-entityManagerFactoryRef = "entityManagerFactory",
-transactionManagerRef = "transactionManager")
+@EnableJpaRepositories(basePackages = "com.testui", entityManagerFactoryRef = "entityManagerFactory",
+	transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 public class TestUiApplication {
 

@@ -16,4 +16,9 @@ public class DoctorController {
 		return "doc_search_edit";
 	}
 	
+	@GetMapping("subjects")
+	public String subjects() {
+		return "subjectArea";
+	}
+	
 }

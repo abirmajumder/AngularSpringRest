@@ -46,3 +46,55 @@ function postObject( $http, entity, obj, func) {
 	     });
 }
 
+function editableGridController( app, controllerName, objMap, initLoadArr) {
+	
+	app.controller( controllerName, function($scope,$http) {
+		$scope.st = ["Y","N"];
+		$scope.objEdits = {};
+		$scope.objEmpty = objMap;//{ "doctor" : {"id":"","name":"","qualification":"","active":"Y"} };
+		
+		$scope.addAny = function( entity, objName) {
+			alert(JSON.stringify($scope[objName]));
+			postObject($http, entity, $scope[objName], function (resp) {
+				$scope[objName].id = resp.data.id;
+				$scope[entity].push($scope[objName]);
+				$scope[objName] = $scope.objEmpty[objName];
+			});
+		}
+		
+		$scope.initing = function() {
+			for (key in $scope.objEmpty) {
+			    if ($scope.objEmpty.hasOwnProperty(key)) {
+			    	$scope['o' + key] = $scope.objEmpty[key];
+			    }
+			} 
+			initLoadArr.forEach(function(e,url) {
+				search($scope, $http, e.entity, e.url); 
+			});
+		}
+		
+		$scope.setViewForEdit = function( entity, docId, val ) {
+			$scope.objEdits[ entity + "_" + docId] = val;
+			if(!val) {
+				loadById($scope[entity], $http, entity, docId);
+			}
+		}
+		
+		$scope.rowView = function ( entity, id ) {
+			return $scope.objEdits[ entity + "_" + id];
+		}
+		
+		$scope.rowClass = function( entity, id ) {
+			return $scope.rowView(entity, id) ? 'form-control' : 'dead';
+		}
+		
+		$scope.updateRow = function( entity, obj ) {
+			postObject($http, entity, obj, function (resp) {
+				alert(JSON.stringify(resp.data));
+			});
+			$scope.objEdits[ entity + "_" + obj.id] = false;
+		}
+	});
+	return app;
+}
+
