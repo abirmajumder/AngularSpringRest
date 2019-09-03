@@ -23,6 +23,7 @@ function search($scope, $http, entity,url) {
 		 .then( function(res) {
 			 $scope[entity] = res.data._embedded[entity];
 			 $scope.msg = '';
+			 //alert( JSON.stringify($scope[entity]) );
 		 });
 }
 
@@ -54,10 +55,10 @@ function editableGridController( app, controllerName, objMap, initLoadArr) {
 		$scope.objEmpty = objMap;//{ "doctor" : {"id":"","name":"","qualification":"","active":"Y"} };
 		
 		$scope.addAny = function( entity, objName) {
-			alert(JSON.stringify($scope[objName]));
 			postObject($http, entity, $scope[objName], function (resp) {
 				$scope[objName].id = resp.data.id;
 				$scope[entity].push($scope[objName]);
+				alert(JSON.stringify($scope[objName]));
 				$scope[objName] = $scope.objEmpty[objName];
 			});
 		}
@@ -68,7 +69,7 @@ function editableGridController( app, controllerName, objMap, initLoadArr) {
 			    	$scope['o' + key] = $scope.objEmpty[key];
 			    }
 			} 
-			initLoadArr.forEach(function(e,url) {
+			initLoadArr.forEach(function(e,ind) {
 				search($scope, $http, e.entity, e.url); 
 			});
 		}

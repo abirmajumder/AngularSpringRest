@@ -42,10 +42,9 @@
 									<input ng-model="sub.description" ng-readonly="!rowView('areas', sub.id)" ng-class="rowClass('areas', sub.id)"  />
 								</td>
 								<td>
-									<angucomplete-alt minlength = '3' match-class = 'highlight' selected-object = 'afterSelectedPatient' 
-										remote-url = 'http://localhost:8080/ui/areas/findByNameIgnoreCase?name=' title-field = 'name,sex' 
-										id = 'patientGeneralComplete' placeholder = 'Search Patient' input-class = 'form-control' pause = '100' >
-									</angucomplete-alt>
+									<select class='form-control' ng-model='sub.dependentSubjectArea' 	>
+											<option ng-repeat='x in areas' ng-hide='x.id == sub.id' ng-value="{{x.id}}">{{x.name}}</option>
+									</select>
 								</td>
 								<td>
 									<span class="glyphicon glyphicon-edit" ng-show="!rowView('areas', sub.id)" 
@@ -64,6 +63,11 @@
 									<input ng-model="oarea.description" class='form-control'  />
 								</td>
 								<td>
+									<select class='form-control' ng-model='oarea.dependentSubjectArea'>
+										<option ng-repeat='x in areas' ng-hide='x.id == sub.id'  value="{{x.id}}">{{x.name}}</option>	
+									</select>
+								</td>
+								<td>
 									<input type="image" src="image/user-add-icon.png" style="color:red;" ng-click="addAny('areas','oarea')"/>
 								</td>
 							</tr>
@@ -71,6 +75,6 @@
 					</table>
 				</div>
 			</div>
-		</form>
+		</form>	
 	</body>
 </html>				
